@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { DateTimePicker } from "../time-picker/date-time-picker";
+import { enqueue } from "@/lib/gatt-queue";
 
 function CharacteristicCurrentTime({
   characteristic,
@@ -26,7 +27,10 @@ function CharacteristicCurrentTime({
       if (value) setCurrentTime(decodeCurrentTime(value).toLocaleString());
     });
 
-    characteristic.startNotifications();
+    // characteristic.startNotifications();
+    (async () => {
+      await enqueue(characteristic.startNotifications);
+    })();
   }, []);
 
   function setTime() {

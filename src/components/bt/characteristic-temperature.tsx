@@ -1,6 +1,7 @@
 import { decodeTemperature } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify-icon/react";
+import { enqueue } from "@/lib/gatt-queue";
 
 function CharacteristicTemperature({
   characteristic,
@@ -16,7 +17,10 @@ function CharacteristicTemperature({
       if (value) setTemp(decodeTemperature(value));
     });
 
-    characteristic.startNotifications();
+    // characteristic.startNotifications();
+    (async () => {
+      await enqueue(characteristic.startNotifications);
+    })();
   }, []);
 
   return (

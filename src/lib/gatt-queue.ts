@@ -1,9 +1,13 @@
-const gattQueue: (() => Promise<void>)[] = [];
+type Queueable = () => Promise<unknown> | unknown;
+
+const gattQueue: Queueable[] = [];
 let isProcessing = false;
 
-function enqueue(task: () => Promise<void>) {
+function enqueue(task: Queueable) {
   return new Promise((resolve, reject) => {
-    gattQueue.push(() => task().then(resolve).catch(reject));
+    gattQueue.push(() =>
+      (async () => await task())().then(resolve).catch(reject)
+    );
 
     if (!isProcessing) {
       processQueue();

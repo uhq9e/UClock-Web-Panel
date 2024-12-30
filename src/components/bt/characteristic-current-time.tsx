@@ -29,7 +29,7 @@ function CharacteristicCurrentTime({
 
     // characteristic.startNotifications();
     (async () => {
-      await enqueue(characteristic.startNotifications);
+      await enqueue(() => characteristic.startNotifications());
     })();
   }, []);
 
